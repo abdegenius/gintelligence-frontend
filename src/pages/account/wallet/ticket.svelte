@@ -1,7 +1,7 @@
 <script>
     import {onMount} from "svelte"
     import { __serialize, __deserialize } from '../../../helpers/index'
-    import { BALANCE, VIRTUAL_ACCOUNT, TOPUP, LOAD } from "../../../actions/user/index"
+    import { BALANCE, GENERATE } from "../../../actions/user/index"
     import axios from "axios"
     let user = null
     const userData = __deserialize('user')
@@ -16,7 +16,6 @@
     let wallet_balance = null
     onMount(async() => {
         GET_BALANCE()
-        GET_VIRTUAL_ACCOUNT()
     })
     
     const GET_BALANCE = () => {
@@ -32,28 +31,17 @@
         BALANCE(callback, onError)
     }
 
-    const GET_VIRTUAL_ACCOUNT = () => {
-        const callback = (res) => {
-            if(res){
-                if(res.status == 'success'){
-                    virtual_account = res.data
-                }
-            }
-        }
-        const onError = (error) => {
-        }
-        VIRTUAL_ACCOUNT(callback, onError)
-    }
-
 
     let amount = ''
-    let ticket_number = ''
     const SUBMIT = (e) => {
         e.preventDefault()
         const callback = (res) => {
             if(res){
                 if(res.status == 'success'){
-                    window.location.assign(res.data)
+                    document.querySelector("#info").innerHTML = `
+                        <div class="mb-4 rounded-md bg-green-200 text-green-600 font-bold p-4 border-l-4 border-green-600">${res.message}</div>
+                    `;
+                    amount = ''
                 }
             }
         }
@@ -67,32 +55,10 @@
                 }
             }
         }
-        TOPUP(amount, callback, onError)
+        GENERATE(amount, callback, onError)
     }
 
-    const SBT = (e) => {
-        e.preventDefault()
-        const callback = (res) => {
-            if(res){
-                if(res.status == 'success'){
-                    document.querySelector("#info").innerHTML = `
-                        <div class="mb-4 rounded-md bg-yellow-200 text-yellow-600 font-bold p-4 border-l-4 border-yellow-600">${res.message}</div>
-                    `;
-                }
-            }
-        }
-
-        const onError = (error) => {
-            if (error.response) {
-                if(error.response.data.data.length == 0 && error.response.data.error == true){
-                    document.querySelector("#info").innerHTML = `
-                        <div class="mb-4 rounded-md bg-red-200 text-red-600 font-bold p-4 border-l-4 border-red-600">${error.response.data.message}</div>
-                    `;
-                }
-            }
-        }
-        LOAD(ticket_number, callback, onError)
-    }
+    
 </script>
     <div class="w-full bg-blue-50 min-h-screen mt-16 p-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -105,12 +71,6 @@
             </div>
 
             <div class="bg-gray-100 rounded-md shadow-md px-4 py-8 mb-4">
-                <b class="font-bold text-lg text-gray-500">Topup Wallet Now</b>
-                <div class="my-4 flex justify-between items-center">
-                    <div class="bg-white text-center font-bold text-sm xl:text-lg w-full mb-4 p-4 rounded-t-md border-b-4 border-blue-600 pb-4 cursor-pointer"> Self-Topup</div>
-                    <div class="w-full text-center font-bold text-sm xl:text-lg mb-4 border-b-4 p-4 border-gray-400 pb-4 cursor-pointer"><a href="/account/wallet/thirdparty-topup"> Thirdparty-Topup</a></div>
-                </div>
-
                 <div class="mt-6 bg-gray-50 p-4 rounded-md">
                     <!-- <div class="bg-gray-100 p-4 rounded-md mb-4 border border-blue-100">
                         <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Your Virtual Account</p>
@@ -149,42 +109,18 @@
                         {/if}
                     </div> -->
 
-                    <div class="bg-gray-100 p-4 rounded-md border border-blue-100">
-                        <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Enter the amount you want to topup below.</p>
+                
+                    <div class="bg-blue-100 p-4 rounded-md border border-blue-100">
+                        <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Generate a ticket from wallet balance.</p>
                        
                         <form method="POST" on:submit|preventDefault={SUBMIT} class="mt-4">
                             <div id="info"></div>
-                            <p class="text-green-600 bg-green-100 p-4 font-bold mb-4">
-                                Please enter amount you want to topup below and select the payment mode (Card payment or Bank Transfer)
-                            </p>
                             <div class="block mb-2">
-                                <input type="text" bind:value={amount} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter Amount"/>
-                            </div>
-                            <div class="block mb-2">
-                                <select class="border-3 border-gray-100 p-4 rounded-md outline-none w-full">
-                                    <option value="card">Card payment</option>
-                                    <!-- <option value="bank">Bank Transfer</option> -->
-                                </select>
+                                <input type="text" bind:value={amount} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter Ticket Value in naira"/>
                             </div>
                             <div class="block mt-4">
                                 <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-semibold text-white p-4 rounded-md">
-                                    Topup Now
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="bg-blue-300 p-4 mt-4 rounded-md border border-blue-100">
-                        <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Topup wallet using ticket.</p>
-                       
-                        <form method="POST" on:submit|preventDefault={SBT} class="mt-4">
-                            <div id="info"></div>
-                            <div class="block mb-2">
-                                <input type="text" bind:value={ticket_number} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter Ticket Number"/>
-                            </div>
-                            <div class="block mt-4">
-                                <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-semibold text-white p-4 rounded-md">
-                                    Load Now
+                                    Generate
                                 </button>
                             </div>
                         </form>
@@ -195,24 +131,7 @@
 
         </div>
         <div>
-            <div class="bg-gray-50 p-4 rounded-md">
-                <b class="font-bold text-lg text-gray-500">Self Topup History</b>
-                <ul class="overflow-x-scroll ">
-                    <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
-                        <div>Date</div>
-                        <div>Amount(&#8358;)</div>
-                        <div class="hidden md:block">Remarks</div>
-                        <div>Status</div>
-                    </li>
-
-                    <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
-                        <div>2021-04-02</div>
-                        <div>&#8358;10,000</div>
-                        <div class="hidden md:block">09000000645/topup</div>
-                        <div>successful</div>
-                    </li>
-                </ul>
-            </div>
+         
 
 
             <div class="bg-gray-50 mt-4 p-4 rounded-md">

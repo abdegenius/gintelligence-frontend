@@ -34,6 +34,24 @@
         }
         DASHBOARD(callback, onError)
     }
+
+    let otp = ''
+
+    const GET_OTP = async() => {
+        let res = await fetch(`https://fsi.ng/api/v1/africastalking/version1/messaging`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "sandbox-key": "0KDc0NGPKaK9TJDW23qXKma6NzIKXfl81634140240"
+            },
+            body: JSON.stringify({
+                "username": user.name,
+                "to": user.phone.substring(0,4) == "+234" ? user.phone : "+234"+user.phone.substring(1),
+                "message": "Your account OTP verification pin is:  "+user.otp
+            }),
+        });
+    }
 </script>
 <div class="w-full bg-blue-50 min-h-screen mt-16 p-4">
 
@@ -65,4 +83,24 @@
         </div>
     </div>
     
+    {#if user.verification == '0'}
+        <div class="mt-4 bg-gray-50 shadow-md rounded-md p-6">
+            <h3 class="mb-4 text-lg font-bold text-gray-400">Verify Your Phone Number</h3>
+            <form id="verifyForm" style="display: none;" class="bg-white rounded-md shadow-md w-10/12 md:w-1/2 lg:w-1/3 m-auto mt-8 p-4 md:p-8" method="POST" on:submit|preventDefault=>
+                <div id="info"></div>
+                <div class="block mb-2">
+                    <input required type="text" id="" bind:value={otp} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter OTP"/>
+                </div>
+                <div class="block mt-4">
+                    <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
+                        VERIFY
+                    </button>
+                </div>
+            </form>
+
+            <button on:click|preventDefault={GET_OTP} type="submit" class="block w-full bg-black text-center text-xl font-black text-white p-4 rounded-md">
+                GET OTP NOW
+            </button>
+        </div>
+    {/if}
 </div>

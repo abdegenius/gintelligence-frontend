@@ -183,3 +183,98 @@ export async function VIRTUAL_ACCOUNT(callback, onError) {
     return false;
   }
 }
+
+export async function TOPUP(amount, callback, onError) {
+  try {
+    let user = await fetch(`${BASE_URL}/user/topup/paystack`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token
+        },
+        body: JSON.stringify({
+          amount
+        }),
+      });
+    user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
+
+    user.status === "success" && callback && callback(user);
+
+    //if (user.status === "error") throw user;
+
+    return user;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+
+export async function LOAD(ticket_number, callback, onError) {
+  try {
+    let user = await fetch(`${BASE_URL}/user/load/ticket`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token
+        },
+        body: JSON.stringify({
+          ticket_number
+        }),
+      });
+    user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
+
+    user.status === "success" && callback && callback(user);
+
+    //if (user.status === "error") throw user;
+
+    return user;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+
+export async function GENERATE(amount, callback, onError) {
+  try {
+    let user = await fetch(`${BASE_URL}/user/new/ticket`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token
+        },
+        body: JSON.stringify({
+          amount
+        }),
+      });
+    user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
+
+    user.status === "success" && callback && callback(user);
+
+    //if (user.status === "error") throw user;
+
+    return user;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
