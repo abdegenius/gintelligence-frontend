@@ -29,7 +29,7 @@ export async function LOG_USER_IN(phone, password, callback, onError) {
   }
 }
 
-export async function SIGN_USER_UP(name, phone, password, callback, onError) {
+export async function SIGN_USER_UP(email, name, phone, password, callback, onError) {
   try {
     let user = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
@@ -40,7 +40,8 @@ export async function SIGN_USER_UP(name, phone, password, callback, onError) {
         body: JSON.stringify({
           phone,
           password,
-          name
+          name,
+          email
         }),
       });
     user = await user.json();

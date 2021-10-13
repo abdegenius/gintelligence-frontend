@@ -34,6 +34,7 @@
     let phone = user.phone
     let department = user.department
     let level = user.level
+    let email = user.email
 
     const SUBMIT = (e) => {
         e.preventDefault()
@@ -61,7 +62,7 @@
                 }
             }
         }
-        EDIT_PROFILE(name, department, level, callback, onError)
+        EDIT_PROFILE(name, department, level, email, callback, onError)
     }
 </script>
 
@@ -104,6 +105,10 @@
                     <div class="mb-2 p-2 block">
                         <label for="display_name" class="text-sm mb-2 text-gray-600 font-normal">Display Name</label>
                         <input type="text" bind:value={name} required class="border-3 border-gray-100 p-4 rounded-md outline-none w-full"/>
+                    </div>
+                    <div class="mb-2 p-2 block">
+                        <label for="email" class="text-sm mb-2 text-gray-600 font-normal">Email Address</label>
+                        <input type="email" bind:value={email} required class="border-3 border-gray-100 p-4 rounded-md outline-none w-full"/>
                     </div>
                     <div class="mb-2 p-2 block">
                         <label for="department" class="text-sm mb-2 text-gray-600 font-normal">Department</label>

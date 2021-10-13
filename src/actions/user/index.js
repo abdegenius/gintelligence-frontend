@@ -22,8 +22,13 @@ export async function DASHBOARD(callback, onError) {
     });
   dashboard = await dashboard.json();
 
-  dashboard.status === "success" && callback && callback(dashboard);
+  if(dashboard.status == "error"){
+    window.location.assign("/login")
+    window.localStorage.removeItem("user")
+    window.localStorage.removeItem("token")
+  }
 
+  dashboard.status === "success" && callback && callback(dashboard);
     return dashboard;
   } catch (err) {
     onError && onError(err);
@@ -43,6 +48,11 @@ export async function BALANCE(callback, onError) {
       }
     });
   balance = await balance.json();
+  if(balance.status == "error"){
+    window.location.assign("/login")
+    window.localStorage.removeItem("user")
+    window.localStorage.removeItem("token")
+  }
   balance.status === "success" && callback && callback(balance);
     return balance;
   } catch (err) {
@@ -51,7 +61,7 @@ export async function BALANCE(callback, onError) {
   }
 }
 
-export async function EDIT_PROFILE(name, department, level, callback, onError) {
+export async function EDIT_PROFILE(name, department, level, email, callback, onError) {
   try {
     let user = await fetch(`${BASE_URL}/user/profile/edit`, {
         method: "POST",
@@ -63,10 +73,16 @@ export async function EDIT_PROFILE(name, department, level, callback, onError) {
         body: JSON.stringify({
           name,
           department,
-          level
+          level,
+          email
         }),
       });
     user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
 
     user.status === "success" && callback && callback(user);
 
@@ -94,6 +110,11 @@ export async function CONTACT(address, callback, onError) {
         }),
       });
     user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
 
     user.status === "success" && callback && callback(user);
 
@@ -121,12 +142,42 @@ export async function SECURITY(old_password, password, password_again, callback,
         }),
       });
     user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
 
     user.status === "success" && callback && callback(user);
 
     //if (user.status === "error") throw user;
 
     return user;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+
+export async function VIRTUAL_ACCOUNT(callback, onError) {
+  try {
+    let virtual_account = await fetch(`${BASE_URL}/user/virtual/account`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+token
+      }
+    });
+  virtual_account = await virtual_account.json();
+  if(virtual_account.status == "error"){
+    window.location.assign("/login")
+    window.localStorage.removeItem("user")
+    window.localStorage.removeItem("token")
+  }
+  virtual_account.status === "success" && callback && callback(virtual_account);
+    return virtual_account;
   } catch (err) {
     onError && onError(err);
     return false;

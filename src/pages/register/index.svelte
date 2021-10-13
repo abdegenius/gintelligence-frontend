@@ -4,6 +4,7 @@
     let phone = ''
     let password = ''
     let name = ''
+    let email = ''
     onMount(() => {
         const user = localStorage.getItem('user')
         if (user) {
@@ -36,7 +37,7 @@
                 }
             }
         }
-        SIGN_USER_UP(name, phone, password, callback, onError)
+        SIGN_USER_UP(email, name, phone, password, callback, onError)
     }
   
 </script>
@@ -67,6 +68,9 @@
         </div>
         <div class="block mb-2">
             <input required type="text" id="phone" bind:value={phone} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Phone Number"/>
+        </div>
+        <div class="block mb-2">
+            <input required type="email" id="email" bind:value={email} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Email Address"/>
         </div>
         <div class="block mb-2">
             <input required type="password" minlength="6" maxlength="8" id="password" bind:value={password} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Password"/>

@@ -1,6 +1,7 @@
 import axios from "axios";
 export const api = {
   BASE_URL: "http://127.0.0.1:8000/api",
+  FSI_KEY: "0KDc0NGPKaK9TJDW23qXKma6NzIKXfl81634140240"
 };
 
 export const connector = axios.create({
