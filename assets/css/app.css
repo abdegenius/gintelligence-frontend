@@ -1,0 +1,9 @@
+a{
+    color:#FFFFFF;
+    font-weight: 900;
+}
+.box-shadow {
+    background: #F4F2F2;
+    box-shadow: -10px -10px 30px #FFFFFF, 10px 10px 30px rgba(174, 174, 192, 0.4);
+    border-radius: 10px;
+}
