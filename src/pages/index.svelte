@@ -1,1 +1,3 @@
-HELLO WORLD
+<script>
+    window.location.assign('/login')
+</script>
