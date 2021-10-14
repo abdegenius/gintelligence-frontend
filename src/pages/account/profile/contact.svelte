@@ -33,6 +33,8 @@
     let address = user.contact
     const SUBMIT = (e) => {
         e.preventDefault()
+
+        document.querySelector(".btn").innerHTML = 'saving Changes <i class="fa fa-spin fa-spinner"></i>';
         const callback = (res) => {
             if(res){
                 if(res.status == 'success' && res.proceed == 1){
@@ -41,6 +43,11 @@
                     document.querySelector("#info").innerHTML = `
                         <div class="mb-4 rounded-md bg-green-200 text-green-600 font-bold p-4 border-l-4 border-green-600">Account updated successfully.</div>
                     `;
+
+                    document.querySelector(".btn").innerHTML = 'Saved <i class="fa fa-spin fa-check"></i>';
+                    setTimeout(() => {
+                        document.querySelector(".btn").innerHTML = 'Save Changes';
+                    },2000)
                 }
                 document.querySelector("#info").innerHTML = `
                     <div class="mb-4 rounded-md bg-yellow-200 text-yellow-600 font-bold p-4 border-l-4 border-yellow-600">${res.message}</div>
@@ -49,6 +56,7 @@
         }
 
         const onError = (error) => {
+        document.querySelector(".btn").innerHTML = 'Save Changes';
             if (error.response) {
                 if(error.response.data.data.length == 0 && error.response.data.error == true){
                     document.querySelector("#info").innerHTML = `
@@ -102,7 +110,7 @@
                         <textarea rows=4 id="address" bind:value={address} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full"></textarea>
                     </div>
                     <div class="block mt-4 p-2">
-                        <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
+                        <button type="submit" class="btn block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
                             Save Changes
                         </button>
                     </div>

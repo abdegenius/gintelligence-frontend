@@ -38,6 +38,7 @@
     let otp = ''
 
     const GET_OTP = async() => {
+        document.querySelector(".btn").innerHTML = 'Sending OTP <i class="fa fa-spin fa-spinner"></i>';
         let res = await fetch(`https://fsi.ng/api/v1/africastalking/version1/messaging`, {
             method: "POST",
             headers: {
@@ -57,7 +58,10 @@
                 document.querySelector(".send").style.display = 'none'
                 document.querySelector(".form").style.display = 'block'
                 window.alert("OTP Sent")
+                document.querySelector(".btn").innerHTML = '';
             }
+
+            document.querySelector(".btn").innerHTML = 'GET OTP NOW';
         }
     }
 
@@ -102,13 +106,13 @@
                     <p class="my-2 font-bold text-md cursor-pointer" on:click={GET_OTP}>RESEND</p>
                 </div>
                 <div class="block mt-4">
-                    <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
+                    <button type="submit" class="btn block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
                         VERIFY
                     </button>
                 </div>
             </form>
 
-            <button on:click|preventDefault={GET_OTP} type="submit" class="send block w-full bg-black text-center text-xl font-black text-white p-4 rounded-md">
+            <button on:click|preventDefault={GET_OTP} type="submit" class="btn send block w-full bg-black text-center text-xl font-black text-white p-4 rounded-md">
                 GET OTP NOW
             </button>
         </div>

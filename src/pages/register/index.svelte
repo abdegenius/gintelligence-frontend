@@ -14,17 +14,23 @@
 
     const SIGNUP = (e) => {
         e.preventDefault()
+        document.querySelector(".btn").innerHTML = '<i class="fa fa-spin fa-spinner"></i>';
         const callback = (res) => {
             if(res){
-                if(res.status == 'success' && res.proceed == 1){
+                if(res.status == 'success' && res.proceed == '1'){
+                    document.querySelector(".btn").innerHTML = '<i class="fa fa-check"></i>';
                     document.querySelector("#info").innerHTML = `
                         <div class="mb-4 rounded-md bg-green-200 text-green-600 font-bold p-4 border-l-4 border-green-600">Account created successfully.</div>
                     `;
                     setTimeout( () => { window.location.assign('/login') }, 2000) 
                 }
-                document.querySelector("#info").innerHTML = `
-                    <div class="mb-4 rounded-md bg-yellow-200 text-yellow-600 font-bold p-4 border-l-4 border-yellow-600">${res.user.message}</div>
-                `;
+                else{
+
+                    document.querySelector(".btn").innerHTML = 'SIGN UP';
+                    document.querySelector("#info").innerHTML = `
+                        <div class="mb-4 rounded-md bg-yellow-200 text-yellow-600 font-bold p-4 border-l-4 border-yellow-600">${res.user.message}</div>
+                    `;
+                }
             }
         }
 
@@ -76,7 +82,7 @@
             <input required type="password" minlength="6" maxlength="8" id="password" bind:value={password} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Password"/>
         </div>
         <div class="block mt-4">
-            <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
+            <button type="submit" class="btn block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
                 SIGN UP
             </button>
         </div>

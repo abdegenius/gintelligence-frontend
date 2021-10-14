@@ -34,12 +34,17 @@
     let password = ''
     let password_again = ''
     const SUBMIT = (e) => {
+        document.querySelector(".btn").innerHTML = 'Saving Changes <i class="fa fa-spin fa-spinner"></i>';
         e.preventDefault()
         const callback = (res) => {
             if(res){
                 if(res.status == 'success' && res.proceed == 1){
                     window.localStorage.removeItem("user")
                     window.localStorage.setItem("user", JSON.stringify(res.data))
+                    document.querySelector(".btn").innerHTML = 'Saved <i class="fa fa-spin fa-check"></i>';
+                    setTimeout(() => {
+                        document.querySelector(".btn").innerHTML = 'Save Changes';
+                    },2000)
                     document.querySelector("#info").innerHTML = `
                         <div class="mb-4 rounded-md bg-green-200 text-green-600 font-bold p-4 border-l-4 border-green-600">Account updated successfully.</div>
                     `;
@@ -51,6 +56,7 @@
         }
 
         const onError = (error) => {
+            document.querySelector(".btn").innerHTML = 'Save Changes';
             if (error.response) {
                 if(error.response.data.data.length == 0 && error.response.data.error == true){
                     document.querySelector("#info").innerHTML = `
@@ -112,7 +118,7 @@
                         <input type="password" bind:value={password_again} id="password" class="border-3 border-gray-100 p-4 rounded-md outline-none w-full"/>
                     </div>
                     <div class="block mt-4 p-2">
-                        <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
+                        <button type="submit" class="btn  w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
                             Save Changes
                         </button>
                     </div>
