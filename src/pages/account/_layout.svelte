@@ -56,7 +56,8 @@
                 <span class="text-white">&nbsp; BILLING</span></a>
             </li> -->
             <li class="w-full mb-4 cursor-pointer p-4 text-xl font-bold text-white">
-                <span class="text-white">&nbsp; LOGOUT</span>
+                <a on:click={closeMenuTab} class="no-underline text-white" href="/account/logout">
+                <span class="text-white">&nbsp; LOGOUT</span></a>
             </li>
         </ul>
     </div>
@@ -86,8 +87,8 @@
                 &nbsp; BILLING</a>
             </li> -->
             <li class="w-full mb-8 hover:text-2xl cursor-pointer p-4 text-md xl:text-xl font-bold text-blue-900">
-                <i class="fa fa-sign-out-alt"></i>
-                &nbsp; LOGOUT
+                <a class="no-underline" href="/account/logout"><i class="fa fa-sign-out-alt"></i>
+                &nbsp; LOGOUT</a>
             </li>
         </ul>
 

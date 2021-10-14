@@ -77,7 +77,7 @@
             <p class="mb-6 mt-2 text-sm text-gray-400 text-center">Member since {user.created_at}</p>
 
             <div class="mt-4 flex justify-center">
-                <div class="bg-red-600 rounded-md py-2 px-4 font-light text-white no-underline">Log Out</div>
+                <div class="bg-red-600 rounded-md py-2 px-4 font-light text-white no-underline"><a href="/account/logout">Log Out</a></div>
             </div>
 
             <div class="bg-green-500 rounded-md shadow-md p-4 mt-5">
