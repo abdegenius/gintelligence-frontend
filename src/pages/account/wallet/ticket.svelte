@@ -1,9 +1,10 @@
 <script>
     import {onMount} from "svelte"
     import { __serialize, __deserialize } from '../../../helpers/index'
-    import { BALANCE, GENERATE } from "../../../actions/user/index"
+    import { BALANCE, GENERATE, TICKETS } from "../../../actions/user/index"
     import axios from "axios"
     let user = null
+    let tickets = null
     const userData = __deserialize('user')
     if(userData){
         user = userData
@@ -16,6 +17,7 @@
     let wallet_balance = null
     onMount(async() => {
         GET_BALANCE()
+        GET_TICKETS()
     })
     
     const GET_BALANCE = () => {
@@ -29,6 +31,18 @@
         const onError = (error) => {
         }
         BALANCE(callback, onError)
+    }
+    const GET_TICKETS = () => {
+        const callback = (res) => {
+            if(res){
+                if(res.status == 'success' && res.proceed == 1){
+                    tickets = res.data
+                }
+            }
+        }
+        const onError = (error) => {
+        }
+        TICKETS(callback, onError)
     }
 
 
@@ -72,42 +86,7 @@
 
             <div class="bg-gray-100 rounded-md shadow-md px-4 py-8 mb-4">
                 <div class="mt-6 bg-gray-50 p-4 rounded-md">
-                    <!-- <div class="bg-gray-100 p-4 rounded-md mb-4 border border-blue-100">
-                        <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Your Virtual Account</p>
-                        {#if virtual_account && virtual_account.proceed == '1'}
-                        <ul>
-                            <li class="flex justify-between items-center my-4">
-                                <div class="mr-5"><b>Bank Name</b></div>
-                                <div><span class="text-gray-600 italic">Access Bank</span></div>
-                            </li>
-                            <li class="flex justify-between items-center my-4">
-                                <div class="mr-5"><b>Account Name</b></div>
-                                <div><span class="text-gray-600 italic">Bamanja Johnnie</span></div>
-                            </li>
-                            <li class="flex justify-between items-center my-4">
-                                <div class="mr-5"><b>Account Number</b></div>
-                                <div><span class="text-gray-600 italic">0799605419</span></div>
-                            </li>
-                        </ul>
-                        {:else}
-                        <form method="POST" on:submit|preventDefault={GENERATE_VIRTUAL_ACCOUNT} class="mt-4">
-                            <p class="text-gray-500 font-bold mb-4">
-                                Ouch! It appears you don't have a virtual account yet, enter your BVN and NUBAN account number below to generate a virtual account.
-                            </p>
-                            <div class="block mb-2">
-                                <input type="number" bind:value={bvn} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your BVN"/>
-                            </div>
-                            <div class="block mb-2">
-                                <input type="number" bind:value={nuban} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your NUBAN"/>
-                            </div>
-                            <div class="block mt-4">
-                                <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-semibold text-white p-4 rounded-md">
-                                    Proceed
-                                </button>
-                            </div>
-                        </form>
-                        {/if}
-                    </div> -->
+                    
 
                 
                     <div class="bg-blue-100 p-4 rounded-md border border-blue-100">
@@ -144,12 +123,24 @@
                         <div>Status</div>
                     </li>
 
-                    <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
-                        <div>2021-04-02</div>
-                        <div>&#8358;1000</div>
-                        <div class="hidden md:block">1000-4234</div>
-                        <div>used</div>
-                    </li>
+                    {#await tickets}
+                        <p class="p-4">loading..</p>
+                    {:then data} 
+                        {#if data && data.length > 0}
+
+                        {#each data as h}
+
+                        <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
+                            <div>{h.created_at.substring(0,10)}</div>
+                            <div>&#8358;{h.amount}</div>
+                            <div class="hidden md:block">{h.ticket_number}</div>
+                            <div>{h.status}</div>
+                        </li>
+
+                        {/each}
+
+                        {/if}
+                    {/await}
                 </ul>
             </div>
 

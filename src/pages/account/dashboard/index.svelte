@@ -51,7 +51,16 @@
                 "message": "Your account OTP verification pin is:  "+user.otp
             }),
         });
+        res = await res.json()
+        if(res){
+            if(res.SMSMessageData.Recipients[0].statusCode == '101'){
+                document.querySelector(".send").style.display = 'none'
+                document.querySelector(".form").style.display = 'block'
+                window.alert("OTP Sent")
+            }
+        }
     }
+
 </script>
 <div class="w-full bg-blue-50 min-h-screen mt-16 p-4">
 
@@ -86,10 +95,11 @@
     {#if user.verification == '0'}
         <div class="mt-4 bg-gray-50 shadow-md rounded-md p-6">
             <h3 class="mb-4 text-lg font-bold text-gray-400">Verify Your Phone Number</h3>
-            <form id="verifyForm" style="display: none;" class="bg-white rounded-md shadow-md w-10/12 md:w-1/2 lg:w-1/3 m-auto mt-8 p-4 md:p-8" method="POST" on:submit|preventDefault=>
+            <form style="display: none;" class="bg-white rounded-md shadow-md w-10/12 md:w-1/2 lg:w-1/3 m-auto mt-8 p-4 md:p-8 form" method="POST" on:submit|preventDefault=>
                 <div id="info"></div>
                 <div class="block mb-2">
                     <input required type="text" id="" bind:value={otp} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter OTP"/>
+                    <p class="my-2 font-bold text-md cursor-pointer" on:click={GET_OTP}>RESEND</p>
                 </div>
                 <div class="block mt-4">
                     <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-black text-white p-4 rounded-md">
@@ -98,7 +108,7 @@
                 </div>
             </form>
 
-            <button on:click|preventDefault={GET_OTP} type="submit" class="block w-full bg-black text-center text-xl font-black text-white p-4 rounded-md">
+            <button on:click|preventDefault={GET_OTP} type="submit" class="send block w-full bg-black text-center text-xl font-black text-white p-4 rounded-md">
                 GET OTP NOW
             </button>
         </div>

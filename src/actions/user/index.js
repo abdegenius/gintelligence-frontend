@@ -250,7 +250,7 @@ export async function LOAD(ticket_number, callback, onError) {
 
 export async function GENERATE(amount, callback, onError) {
   try {
-    let user = await fetch(`${BASE_URL}/user/new/ticket`, {
+    let user = await fetch(`${BASE_URL}/user/generate/ticket`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -259,6 +259,92 @@ export async function GENERATE(amount, callback, onError) {
         },
         body: JSON.stringify({
           amount
+        }),
+      });
+    user = await user.json();
+    if(user.status == "error"){
+      window.location.assign("/login")
+      window.localStorage.removeItem("user")
+      window.localStorage.removeItem("token")
+    }
+
+    user.status === "success" && callback && callback(user);
+
+    //if (user.status === "error") throw user;
+
+    return user;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+export async function HISTORY(callback, onError) {
+  try {
+    let history = await fetch(`${BASE_URL}/user/topup/history`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+token
+      }
+    });
+  history = await history.json();
+  if(history.status == "error"){
+    window.location.assign("/login")
+    window.localStorage.removeItem("user")
+    window.localStorage.removeItem("token")
+  }
+  history.status === "success" && callback && callback(history);
+    return history;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+
+export async function TICKETS(callback, onError) {
+  try {
+    let tickets = await fetch(`${BASE_URL}/user/tickets`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+token
+      }
+    });
+  tickets = await tickets.json();
+  if(tickets.status == "error"){
+    window.location.assign("/login")
+    window.localStorage.removeItem("user")
+    window.localStorage.removeItem("token")
+  }
+  tickets.status === "success" && callback && callback(tickets);
+    return tickets;
+  } catch (err) {
+    onError && onError(err);
+    return false;
+  }
+}
+
+
+
+export async function SAVE_VIRTUAL_ACCOUNT(bvn, bank_name, bank_code, account_name, account_number, callback, onError) {
+  try {
+    let user = await fetch(`${BASE_URL}/user/new/account`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token
+        },
+        body: JSON.stringify({
+          bvn,
+          bank_code,
+          bank_name,
+          account_name,
+          account_number
         }),
       });
     user = await user.json();
