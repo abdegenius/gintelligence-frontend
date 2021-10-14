@@ -117,6 +117,7 @@
                 <b class="font-bold text-lg text-gray-500">My Tickets</b>
                 <ul class="overflow-x-scroll ">
                     <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
+                        <div>...</div>
                         <div>Date</div>
                         <div>Amount(&#8358;)</div>
                         <div class="hidden md:block">Code</div>
@@ -131,6 +132,9 @@
                         {#each data as h}
 
                         <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
+                            <td><a href="https://chart.googleapis.com/chart?cht=qr&chl={h.ticket_number}&chs=350x300&choe=UTF-8" class="mr-4 cursor-pointer">
+                                <i class="fa text-red-500 fa-qrcode"></i>
+                            </a> </td>
                             <div>{h.created_at.substring(0,10)}</div>
                             <div>&#8358;{h.amount}</div>
                             <div class="hidden md:block">{h.ticket_number}</div>
