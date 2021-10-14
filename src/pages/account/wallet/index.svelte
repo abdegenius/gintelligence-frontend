@@ -43,7 +43,7 @@
         const callback = (res) => {
             if(res){
                 if(res.status == 'success'){
-                    virtual_account = res
+                    virtual_account = res.data
                 }
             }
         }
@@ -171,11 +171,13 @@
                         }
                     }
                 }
-                SAVE_VIRTUAL_ACCOUNT(bvn, res.data.bank_name, res.data.bank_code, res.account_name, res.data.vnuban, callback, onError)
+                SAVE_VIRTUAL_ACCOUNT(bvn, res.data.bank_name, res.data.bank_code, res.data.account_name, res.data.vnuban, callback, onError)
             }
         }
     }
+
 </script>
+<div id="qrcode"></div>
     <div class="w-full bg-blue-50 min-h-screen mt-16 p-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-white p-4 rounded-md">
@@ -196,19 +198,19 @@
                 <div class="mt-6 bg-gray-50 p-4 rounded-md">
                     <div class="bg-gray-100 p-4 rounded-md mb-4 border border-blue-100">
                         <p class="text-gray-600 font-bold border-b border-gray-200 pb-4">Your Virtual Account</p>
-                        {#if virtual_account && virtual_account.proceed == '1'}
+                        {#if virtual_account && virtual_account.bank_name != ''}
                         <ul>
                             <li class="flex justify-between items-center my-4">
                                 <div class="mr-5"><b>Bank Name</b></div>
-                                <div><span class="text-gray-600 italic">{virtual_account.data.bank_name}</span></div>
+                                <div><span class="text-gray-600 italic">{virtual_account.bank_name}</span></div>
                             </li>
                             <li class="flex justify-between items-center my-4">
                                 <div class="mr-5"><b>Account Name</b></div>
-                                <div><span class="text-gray-600 italic">{virtual_account.data.account_name}</span></div>
+                                <div><span class="text-gray-600 italic">{virtual_account.account_name}</span></div>
                             </li>
                             <li class="flex justify-between items-center my-4">
                                 <div class="mr-5"><b>Account Number</b></div>
-                                <div><span class="text-gray-600 italic">{virtual_account.data.account_number}</span></div>
+                                <div><span class="text-gray-600 italic">{virtual_account.account_number}</span></div>
                             </li>
                         </ul>
                         {:else}
@@ -217,10 +219,10 @@
                                 Ouch! It appears you don't have a virtual account yet, enter your BVN and NUBAN account number below to generate a virtual account.
                             </p>
                             <div class="block mb-2">
-                                <input type="number" bind:value={bvn} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your BVN"/>
+                                <input required type="number" bind:value={bvn} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your BVN"/>
                             </div>
                             <div class="block mb-2">
-                                <input type="number" bind:value={nuban} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your NUBAN"/>
+                                <input required type="number" bind:value={nuban} class="border-3 border-gray-100 p-4 rounded-md outline-none w-full" placeholder="Enter your NUBAN"/>
                             </div>
                             <div class="block mt-4">
                                 <button type="submit" class="block w-full bg-blue-600 text-center text-xl font-semibold text-white p-4 rounded-md">
@@ -315,6 +317,7 @@
                 <b class="font-bold text-lg text-gray-500">My Tickets</b>
                 <ul class="overflow-x-scroll ">
                     <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
+                        <div>...</div>
                         <div>Date</div>
                         <div>Amount(&#8358;)</div>
                         <div class="hidden md:block">Code</div>
@@ -329,6 +332,9 @@
                         {#each data as h}
 
                         <li class="mb-4 p-4 border-b-2 border-gray-100 flex justify-between font-bold">
+                            <a href="https://chart.googleapis.com/chart?cht=qr&chl={h.ticket_number}&chs=350x300&choe=UTF-8" class="mr-4 cursor-pointer">
+                                <i class="fa text-red-500 fa-qrcode"></i>
+                            </a> 
                             <div>{h.created_at.substring(0,10)}</div>
                             <div>&#8358;{h.amount}</div>
                             <div class="hidden md:block">{h.ticket_number}</div>

@@ -332,7 +332,7 @@ export async function TICKETS(callback, onError) {
 
 export async function SAVE_VIRTUAL_ACCOUNT(bvn, bank_name, bank_code, account_name, account_number, callback, onError) {
   try {
-    let user = await fetch(`${BASE_URL}/user/new/account`, {
+    let user = await fetch(`${BASE_URL}/user/save/vaccount`, {
         method: "POST",
         headers: {
           Accept: "application/json",
