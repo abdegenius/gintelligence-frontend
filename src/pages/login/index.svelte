@@ -22,20 +22,22 @@
                        document.querySelector(".btn").innerHTML = '<i class="fa fa-check"></i>';
                        setTimeout( () => { window.location.assign('/account/dashboard') }, 1000) 
                     }
-                    else{
                     document.querySelector("#info").innerHTML = `
                         <div class="mb-4 rounded-md bg-green-200 text-green-600 font-bold p-4 border-l-4 border-green-600">Account logged in successfully.</div>
                     `;
-                    document.querySelector(".btn").innerHTML = 'CONTINUE';
-                    }
                 }
+                else{
+                    document.querySelector(".btn").innerHTML = 'CONTINUE';
+
                 document.querySelector("#info").innerHTML = `
                     <div class="mb-4 rounded-md bg-yellow-200 text-yellow-600 font-bold p-4 border-l-4 border-yellow-600">${res.user.message}</div>
                 `;
+                }
             }
         }
 
         const onError = (error) => {
+                    document.querySelector(".btn").innerHTML = 'CONTINUE';
             if (error.response) {
                 if(error.response.data.data.length == 0 && error.response.data.error == true){
                     document.querySelector("#info").innerHTML = `
