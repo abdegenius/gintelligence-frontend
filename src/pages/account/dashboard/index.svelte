@@ -85,13 +85,13 @@
         <div class="bg-yellow-500 rounded-md shadow-md px-4 py-8">
             <div class="text-xl mb-2 text-left font-bold text-white">&#8358;{income ? income : '0'}</div>
             <div class="text-right mb-2 text-sm uppercase text-white font-light">
-                <i class="fa fa-arrow-down"></i>&nbsp; INCOME TODAY
+                <i class="fa fa-arrow-down"></i>&nbsp; INBOUND
             </div>
         </div>
         <div class="bg-pink-500 rounded-md shadow-md px-4 py-8">
             <div class="text-xl mb-2 text-left font-bold text-white">&#8358;{spending ? spending : '0'}</div>
             <div class="text-right mb-2 text-sm uppercase text-white font-light">
-                <i class="fa fa-arrow-up"></i>&nbsp; SPENDINGS TODAY
+                <i class="fa fa-arrow-up"></i>&nbsp; OUTBOUND
             </div>
         </div>
     </div>
